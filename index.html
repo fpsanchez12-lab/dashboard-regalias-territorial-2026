@@ -1,1 +1,96 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Regalías territoriales 2026</title><link rel="stylesheet" href="style.css?v=20261110-1830"></head><body><header><div class="ey">Observatorio de regalías · Seguimiento territorial</div><h1>¿Dónde están las regalías y cómo avanzan los proyectos?</h1><p>Lectura interactiva de recursos asignados, estado actual, avance físico, avance financiero, sector temático y nombre de cada proyecto de una base focalizada de 666 proyectos con corte 24 de agosto de 2026.</p><div class="tabs"><button data-mode="municipios" class="on">Ciudades / municipios</button><button data-mode="departamentos">Departamentos</button><button data-mode="segmentos">Segmentación</button><button data-mode="proyectos">Proyectos</button></div></header><main><section class="tools"><div class="f"><label>Departamento</label><select id="dep"></select></div><div class="f" id="dimF"><label>Segmentar por</label><select id="dim"><option value="sector">Sector temático</option><option value="state">Estado del proyecto</option><option value="cat">Categoría</option></select></div><div class="f"><label>Indicador</label><select id="metric"><option value="reg">Regalías asignadas</option><option value="projects">Número de proyectos</option><option value="adverse">% recursos adversos</option><option value="physical">Menor avance físico</option><option value="gap">Brecha físico-financiera</option></select></div><div class="f"><label>Estado</label><select id="st"></select></div><div class="f"><label>Categoría</label><select id="cat"></select></div><div class="f"><label>Sector</label><select id="sec"></select></div><div class="f project-filter"><label>Nombre del proyecto</label><input id="projectQ" list="projectList" placeholder="Escriba o seleccione un proyecto"><datalist id="projectList"></datalist></div><div class="f"><label>Buscar</label><input id="q" placeholder="Proyecto, municipio, departamento o segmento"></div><button class="btn" id="reset" style="background:#ebf5f4;color:#0b6671;border-color:#c9e1df">Limpiar</button></section><section class="stats" id="stats"></section><div class="grid"><section class="panel"><h2>Avance físico frente a financiero</h2><p class="hint">Comparación promedio de proyectos con dato disponible; a la derecha se muestra el indicador seleccionado.</p><div class="bars" id="bars"></div></section><section class="panel"><h3>Lectura gerencial</h3><div class="prose" id="narr"></div><h3>Distribución de recursos por estado</h3><div id="mix"></div></section></div><section class="panel" style="margin-top:16px"><h2>Detalle territorial y de proyectos</h2><div class="tablewrap"><table><thead><tr><th>Territorio/segmento/proyecto</th><th>Departamento</th><th>Proyectos</th><th>Regalías mil MM</th><th>Físico</th><th>Financiero</th><th>Brecha pp</th><th>Adversos</th><th>Estado dominante</th><th>Señal</th></tr></thead><tbody id="tb"></tbody></table></div></section><section class="detail" id="detail"><span class="hint">Haz clic en una barra o fila para abrir la ficha y ver los nombres de los proyectos de la selección.</span></section><p class="src">Fuente: BD Proyectos Regalías · corte 24 de agosto de 2026. El nombre del proyecto proviene de la base fuente. La categoría “elefante blanco u obra inconclusa” corresponde a la clasificación de la fuente y debe contrastarse con el estado actual.</p></main><script src="data01.js"></script><script src="data02.js"></script><script src="data03.js"></script><script src="data04.js"></script><script src="data05.js"></script><script src="data06.js"></script><script src="data07.js"></script><script src="data08.js"></script><script src="data09.js"></script><script src="project_names_gz.js"></script><script src="app-projects-v2.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proyectos consolidados · Seguimiento territorial 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="ey">OBSERVATORIO DE PROYECTOS · SEGUIMIENTO TERRITORIAL</div>
+  <h1>¿Qué proyectos están consolidados y cómo avanzan?</h1>
+  <p>Lectura interactiva de la base consolidada exclusiva de proyectos: ubicación, sector, fuente, situación, monto referido y avances físico y financiero.</p>
+  <div class="hero-meta">
+    <span>Base consolidada: <b>204 proyectos</b></span>
+    <span>Fuentes múltiples</span>
+    <span>Fechas de corte específicas por proyecto</span>
+  </div>
+  <div class="tabs">
+    <button data-mode="proyectos" class="on">Proyectos</button>
+    <button data-mode="departamentos">Departamentos</button>
+    <button data-mode="sectores">Sectores</button>
+  </div>
+</header>
+
+<main>
+  <section class="tools">
+    <div class="f"><label>Departamento / ámbito</label><select id="dep"></select></div>
+    <div class="f"><label>Sector</label><select id="sec"></select></div>
+    <div class="f"><label>Nombre del proyecto</label><select id="project"></select></div>
+    <div class="f"><label>Fuente</label><select id="source"></select></div>
+    <div class="f"><label>Clasificación / acción</label><select id="classif"></select></div>
+    <div class="f"><label>Situación / estado</label><select id="state"></select></div>
+    <div class="f"><label>Ordenar por</label>
+      <select id="metric">
+        <option value="amount">Monto referido</option>
+        <option value="projects">Número de proyectos</option>
+        <option value="physical">Avance físico</option>
+        <option value="financial">Avance financiero</option>
+        <option value="gap">Brecha físico-financiera</option>
+      </select>
+    </div>
+    <div class="f search"><label>Buscar</label><input id="q" placeholder="Proyecto, municipio, entidad o fuente"></div>
+    <label class="check"><input type="checkbox" id="onlyProgress"> Solo con avance</label>
+    <label class="check"><input type="checkbox" id="onlyAmount"> Solo con monto</label>
+    <button class="btn secondary" id="reset">Limpiar</button>
+    <button class="btn" id="export">Exportar CSV ↓</button>
+  </section>
+
+  <section class="stats" id="stats"></section>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Avance físico frente a financiero</h2>
+          <p class="hint">Promedios sobre los proyectos con dato disponible. Los faltantes se mantienen como s/d.</p>
+        </div>
+        <div class="legend-mini"><span class="dot fis"></span>Físico <span class="dot fin"></span>Financiero</div>
+      </div>
+      <div class="bars" id="bars"></div>
+    </section>
+
+    <section class="panel">
+      <h3>Lectura gerencial</h3>
+      <div class="prose" id="narr"></div>
+      <h3>Composición por fuente</h3>
+      <div id="sources"></div>
+    </section>
+  </div>
+
+  <section class="panel table-panel">
+    <div class="panel-head">
+      <div>
+        <h2 id="tableTitle">Detalle de proyectos</h2>
+        <p class="hint" id="tableHint">Haz clic en una fila para abrir la ficha completa.</p>
+      </div>
+      <span class="counter" id="counter"></span>
+    </div>
+    <div class="tablewrap"><table>
+      <thead id="thead"></thead>
+      <tbody id="tb"></tbody>
+    </table></div>
+  </section>
+
+  <section class="detail" id="detail">
+    <span class="hint">Selecciona un proyecto, departamento o sector para abrir la ficha de detalle.</span>
+  </section>
+
+  <p class="src">Fuente: <b>BASE DE DATOS CONSOLIDADA - PROYECTOS</b>. El campo “monto referido” conserva la naturaleza reportada por cada fuente; no se imputan montos ni avances faltantes. La fuente y fecha de corte específica se muestran en cada proyecto.</p>
+</main>
+
+<script src="data01.js"></script><script src="data02.js"></script><script src="data03.js"></script><script src="data04.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
