@@ -1,6 +1,5 @@
-
 const $=id=>document.getElementById(id);
-const raw=window.CONSOLIDATED_PROJECTS||[];
+const M=window.CP_META||{}, raw=window.CP_ROWS||[];
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const num=v=>{if(v===null||v===undefined||v==="")return null;const n=Number(v);return Number.isFinite(n)?n:null};
 const txt=(v,fallback="Sin dato")=>v===null||v===undefined||String(v).trim()===""?fallback:String(v).trim();
@@ -9,27 +8,16 @@ const pct=n=>Number.isFinite(n)?fmt(n)+"%":"s/d";
 const money=n=>Number.isFinite(n)?"$"+fmt(n/1000)+" mil MM":"s/d";
 const avg=a=>{a=a.filter(Number.isFinite);return a.length?a.reduce((x,y)=>x+y,0)/a.length:null};
 const uniq=a=>[...new Set(a.filter(x=>x&&x!=="Sin dato"))].sort((a,b)=>a.localeCompare(b,"es"));
-const cleanState=v=>txt(v,"Sin estado registrado");
-const cleanClass=v=>txt(v,"Sin clasificación / acción");
-const cleanSource=v=>txt(v,"Sin fuente registrada");
-
-const D=raw.map(r=>{
-  const fisCurrent=num(r["Avance físico actual (%)"]), finCurrent=num(r["Avance financiero actual (%)"]);
-  return {
-    id:r["ID"],project:txt(r["Proyecto"],"SIN NOMBRE"),object:txt(r["Objeto / descripción"],""),
-    dep:txt(r["Departamento"],"Sin ámbito territorial"),mun:txt(r["Municipio / ubicación"],"Sin ubicación"),
-    sec:txt(r["Sector"],"Sin sector"),entity:txt(r["Entidad responsable"],"Sin entidad"),
-    state:cleanState(r["Estado / situación"]),fis:fisCurrent??num(r["Avance físico (%)"]),
-    fin:finCurrent??num(r["Avance financiero (%)"]),scope:txt(r["Alcance del avance"],""),
-    total:num(r["Valor total (millones COP)"]),amount:num(r["Recursos regalías / monto referido (millones COP)"]),
-    cut:txt(r["Fecha de corte"],"Sin fecha de corte"),classif:cleanClass(r["Clasificación"]),
-    strategy:txt(r["Estrategia / tipo de intervención"],""),action:txt(r["Acción o compromiso"],""),
-    horizon:txt(r["Plazo / horizonte"],""),obs:txt(r["Observaciones"],""),
-    source:cleanSource(r["Fuente"]),url:txt(r["URL"],""),match:txt(r["Coincidencia con otras bases"],""),
-    beneficiaries:num(r["Beneficiarios"]),nation:num(r["Regalías Nación (millones COP)"]),
-    deptAmount:num(r["Regalías Dpto (millones COP)"]),munAmount:num(r["Regalías Municipio (millones COP)"])
-  }
-});
+const dv=(k,i,fallback="")=>txt((M[k]||[])[i],fallback);
+const D=raw.map(r=>({
+  id:r[0],project:txt(r[1],"SIN NOMBRE"),object:"",
+  dep:dv("dep",r[2],"Sin ámbito territorial"),mun:dv("mun",r[3],"Sin ubicación"),sec:dv("sec",r[4],"Sin sector"),entity:dv("ent",r[5],"Sin entidad"),
+  state:dv("state",r[6],"Sin estado registrado"),fis:num(r[7]),fin:num(r[8]),scope:"",
+  total:num(r[9]),amount:num(r[10]),cut:dv("cut",r[11],"Sin fecha de corte"),classif:dv("cls",r[12],"Sin clasificación / acción"),
+  strategy:dv("strat",r[13],""),action:dv("action",r[14],""),horizon:dv("horizon",r[15],""),obs:dv("obs",r[16],""),
+  source:dv("source",r[17],"Sin fuente registrada"),url:dv("url",r[18],""),match:dv("match",r[19],""),beneficiaries:num(r[20]),
+  nation:num(r[21]),deptAmount:num(r[22]),munAmount:num(r[23])
+}));
 
 let mode="proyectos",metric="amount",term="";
 
@@ -206,14 +194,12 @@ function openProject(id){
       <div><small>Beneficiarios</small><b>${Number.isFinite(p.beneficiaries)?new Intl.NumberFormat("es-CO").format(p.beneficiaries):"s/d"}</b></div>
     </div>
     <div class="detail-grid">
-      ${field("Objeto / descripción",p.object)}
       ${field("Entidad responsable",p.entity)}
       ${field("Situación / estado",p.state)}
       ${field("Clasificación / acción",p.classif)}
       ${field("Estrategia / intervención",p.strategy)}
       ${field("Acción o compromiso",p.action)}
       ${field("Plazo / horizonte",p.horizon)}
-      ${field("Alcance del avance",p.scope)}
       ${field("Fecha de corte",p.cut)}
       ${field("Fuente",p.source)}
       ${field("Coincidencia con otras bases",p.match)}
